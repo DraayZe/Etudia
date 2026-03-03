@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function SignupPage() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +22,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
+        data: { full_name: fullName },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
@@ -133,6 +135,21 @@ export default function SignupPage() {
 
         {/* Form */}
         <form onSubmit={handleSignup} className="space-y-4">
+          <div>
+            <label htmlFor="fullName" className="mb-1.5 block font-anybody text-sm font-medium text-white/70">
+              Prénom et nom
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-anybody text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-white/30 focus:bg-white/[0.07]"
+              placeholder="Jean Dupont"
+            />
+          </div>
+
           <div>
             <label htmlFor="email" className="mb-1.5 block font-anybody text-sm font-medium text-white/70">
               Email

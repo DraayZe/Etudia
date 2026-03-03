@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import UploadSection from "./upload-section";
+import ProfileMenu from "./profile-menu";
 import { FileText, Calendar } from "lucide-react";
 import Link from "next/link";
 
@@ -36,6 +37,12 @@ export default async function DashboardPage({
 
   if (!user) redirect("/auth/login");
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, avatar_url, plan")
+    .eq("user_id", user.id)
+    .single();
+
   const { data: courses } = await supabase
     .from("courses")
     .select("id, title, created_at, analyses(id, summary, key_concepts)")
@@ -56,19 +63,7 @@ export default async function DashboardPage({
           <div className="font-anybody font-bold text-white text-xl tracking-tight">
             ETUDIA
           </div>
-          <div className="flex items-center gap-4">
-            <span className="font-anybody font-light text-white/30 text-sm hidden sm:block">
-              {user.email}
-            </span>
-            <form action="/auth/logout" method="post">
-              <button
-                type="submit"
-                className="hover:cursor-pointer font-anybody font-light text-white/40 hover:text-white text-sm border border-white/[0.08] hover:border-white/20 rounded-lg px-3 py-1.5 transition-all duration-200"
-              >
-                Déconnexion
-              </button>
-            </form>
-          </div>
+          <ProfileMenu email={user.email!} profile={profile} />
         </div>
       </header>
 
@@ -158,7 +153,7 @@ export default async function DashboardPage({
                     <a
                       key={course.id}
                       href={isSelected ? "/dashboard" : `/dashboard?course=${course.id}`}
-                      className={`group flex items-start gap-3 rounded-xl border p-4 transition-all duration-200 ${
+                      className={`cursor-pointer group flex items-start gap-3 rounded-xl border p-4 transition-all duration-200 ${
                         isSelected
                           ? "border-white/15 bg-white/[0.04]"
                           : "border-white/[0.06] bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]"

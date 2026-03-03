@@ -208,7 +208,6 @@ export default function UploadSection({ userId }: { userId: string }) {
           </motion.div>
         )}
 
-        {/* STEP: uploading */}
         {step === "uploading" && (
           <motion.div
             key="uploading"
@@ -225,7 +224,6 @@ export default function UploadSection({ userId }: { userId: string }) {
           </motion.div>
         )}
 
-        {/* STEP: select_feature */}
         {step === "select_feature" && uploadedCourse && (
           <motion.div
             key="select_feature"
@@ -234,7 +232,6 @@ export default function UploadSection({ userId }: { userId: string }) {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
           >
-            {/* File pill */}
             <div className="flex items-center gap-2 mb-6">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03]">
                 <FileText size={12} className="text-violet-400" />
@@ -275,7 +272,6 @@ export default function UploadSection({ userId }: { userId: string }) {
                         : {}
                     }
                   >
-                    {/* Selected indicator */}
                     {isSelected && (
                       <div
                         className="absolute top-3 right-3 w-4 h-4 rounded-full flex items-center justify-center"
@@ -285,7 +281,6 @@ export default function UploadSection({ userId }: { userId: string }) {
                       </div>
                     )}
 
-                    {/* Coming soon badge */}
                     {!feature.available && (
                       <span className="absolute top-3 right-3 font-anybody text-white/30 text-[0.65rem] uppercase tracking-wider">
                         Bientôt
@@ -315,7 +310,7 @@ export default function UploadSection({ userId }: { userId: string }) {
 
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-anybody font-medium text-sm text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="hover:cursor-pointer flex items-center gap-2 px-6 py-3 rounded-xl font-anybody font-medium text-sm text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{ background: "rgb(139,92,246)" }}
             >
               Générer avec l&apos;IA
@@ -324,7 +319,6 @@ export default function UploadSection({ userId }: { userId: string }) {
           </motion.div>
         )}
 
-        {/* STEP: generating */}
         {step === "generating" && (
           <motion.div
             key="generating"
@@ -358,7 +352,6 @@ export default function UploadSection({ userId }: { userId: string }) {
           </motion.div>
         )}
 
-        {/* STEP: done */}
         {step === "done" && (
           <motion.div
             key="done"
