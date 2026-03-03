@@ -11,7 +11,7 @@ export default function GlobeSection() {
 
             <div className="relative z-10 flex flex-col items-center justify-center min-h-[500px] text-center">
                 <h2
-                    className="text-white mb-6"
+                    className="font-anybody text-white mb-6"
                     style={{
                         fontSize: "clamp(2rem, 5vw, 3.5rem)",
                         fontWeight: 800,
@@ -21,19 +21,10 @@ export default function GlobeSection() {
                 >
                     Pour chaque étudiant,
                     <br />
-                    <span
-                        style={{
-                            background:
-                                "linear-gradient(90deg, #a855f7, #ec4899, #f97316)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                        }}
-                    >
-                        partout dans le monde
-                    </span>
+                    partout dans le monde
                 </h2>
                 <p
-                    className="text-white/60 max-w-lg mx-auto"
+                    className="font-anybody font-light text-white/60 max-w-lg mx-auto"
                     style={{ fontSize: "1.1rem", lineHeight: 1.7 }}
                 >
                     Peu importe votre langue, votre pays ou votre niveau.

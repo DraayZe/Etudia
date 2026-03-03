@@ -82,7 +82,7 @@ function PlanBadge({ name, highlight }: { name: string; highlight: boolean }) {
                 }}
             />
             <span
-                className={`text-sm font-semibold px-3.5 py-1 rounded-full ${
+                className={`font-anybody text-sm font-semibold px-3.5 py-1 rounded-full ${
                     highlight
                         ? "bg-white text-black"
                         : "bg-white/10 text-white/70 border border-white/10"
@@ -154,8 +154,8 @@ function PlanCard({
                             )}
                         </div>
 
-                        <p className="leading-relaxed" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.55)" }}>
-                            <span className="text-white font-semibold">{plan.descriptionBold}</span>
+                        <p className="font-anybody font-light leading-relaxed" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.55)" }}>
+                            <span className="font-anybody text-white font-semibold">{plan.descriptionBold}</span>
                             {plan.descriptionRest}
                         </p>
                     </div>
@@ -182,13 +182,13 @@ function PlanCard({
                         >
                             <ArrowUpRight size={18} className="text-white" />
                         </div>
-                        <span className="text-white text-sm font-semibold">{plan.cta}</span>
+                        <span className="font-anybody text-white text-sm font-semibold">{plan.cta}</span>
                     </Link>
                 </div>
 
                 <div className="flex flex-col p-8 md:p-10 md:flex-1">
                     <p
-                        className="mb-6 font-semibold"
+                        className="font-anybody mb-6 font-semibold"
                         style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.05em", textTransform: "uppercase" }}
                     >
                         Ce qui est inclus
@@ -198,7 +198,7 @@ function PlanCard({
                         {plan.features.map((feature) => (
                             <li key={feature} className="flex items-center gap-3">
                                 <FeatureIcon highlight={plan.highlight} />
-                                <span style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.75)" }}>
+                                <span className="font-anybody font-light" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.75)" }}>
                                     {feature}
                                 </span>
                             </li>
@@ -235,7 +235,7 @@ export function PricingSection() {
                             initial={{ opacity: 0 }}
                             animate={titleInView ? { opacity: 1 } : {}}
                             transition={{ duration: 0.6, delay: 0.7 }}
-                            className="text-white/25 text-xs"
+                            className="font-anybody font-light text-white/25 text-xs"
                         >
                             Tous les prix sont TTC · Annulable à tout moment
                         </motion.p>
@@ -247,7 +247,7 @@ export function PricingSection() {
                             initial={{ opacity: 0, x: 30 }}
                             animate={titleInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.1 }}
-                            className="text-white mb-4"
+                            className="font-anybody text-white mb-4"
                             style={{
                                 fontSize: "clamp(1.8rem, 4vw, 3rem)",
                                 fontWeight: 800,
@@ -257,24 +257,17 @@ export function PricingSection() {
                         >
                             Prêt à transformer
                             <br />
-                            <em
-                                style={{
-                                    background: "linear-gradient(90deg, #323232, #a78bfa)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                    fontStyle: "italic",
-                                }}
-                            >
+                            <em style={{ fontStyle: "italic" }}>
                                 tes révisions
                             </em>
-                            <span style={{ color: "rgb(167, 139, 250)" }}> ?</span>
+                            <span style={{ color: "rgb(255, 255, 255)" }}> ?</span>
                         </motion.h2>
 
                         <motion.p
                             initial={{ opacity: 0, x: 30 }}
                             animate={titleInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="text-white/40"
+                            className="font-anybody font-light text-white/40"
                             style={{ fontSize: "0.95rem", lineHeight: 1.7 }}
                         >
                             Choisis le plan qui te correspond.

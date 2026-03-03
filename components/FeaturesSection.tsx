@@ -99,7 +99,7 @@ function FeatureCube({
 
             {/* Title - hidden by default, visible on hover */}
             <div className="absolute inset-0 flex items-center justify-center px-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="text-sm font-medium text-white text-center leading-tight">
+                <span className="font-anybody text-sm font-medium text-white text-center leading-tight">
                     {feature.title}
                 </span>
             </div>
@@ -122,7 +122,7 @@ export function FeaturesSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={titleInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-white mb-4"
+                        className="font-anybody text-white mb-4"
                         style={{
                             fontSize: "clamp(1.8rem, 4vw, 3rem)",
                             fontWeight: 800,
@@ -132,23 +132,14 @@ export function FeaturesSection() {
                     >
                         Tout ce dont vous avez besoin
                         <br />
-                        <span
-                            style={{
-                                background:
-                                    "linear-gradient(90deg, #a684ff, #fb64b6, #ff8904, #01b9d5, #00d492, #7c86ff)",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                            }}
-                        >
-                            pour maîtriser vos cours
-                        </span>
+                        pour maîtriser vos cours
                     </motion.h2>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={titleInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-white/50 max-w-xl mx-auto"
+                        className="font-anybody font-light text-white/50 max-w-xl mx-auto"
                         style={{ fontSize: "1rem", lineHeight: 1.7 }}
                     >
                         Importez n&apos;importe quel document et laissez Etudia générer
@@ -185,11 +176,11 @@ export function FeaturesSection() {
                             >
                                 <activeFeature.icon size={24} strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-xl font-bold text-white">
+                            <h3 className="font-anybody text-xl font-bold text-white">
                                 {activeFeature.title}
                             </h3>
                         </div>
-                        <p className="text-white/60 leading-relaxed text-base">
+                        <p className="font-anybody font-light text-white/60 leading-relaxed text-base">
                             {activeFeature.description}
                         </p>
                     </motion.div>

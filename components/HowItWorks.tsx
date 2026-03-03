@@ -59,9 +59,7 @@ function StepCard({
                 isEven ? "md:flex-row-reverse" : "md:flex-row"
             } items-center gap-8 md:gap-16`}
         >
-            {/* Card */}
             <div className="flex-1 p-8 rounded-3xl bg-white/[0.03] border border-white/8 relative overflow-hidden">
-                {/* Glow */}
                 <div
                     className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-20 bg-gradient-to-br ${step.color}`}
                 />
@@ -73,7 +71,7 @@ function StepCard({
                         <Icon size={20} className="text-white" />
                     </div>
                     <span
-                        className="text-white/20 mt-2"
+                        className="font-anybody text-white/20 mt-2"
                         style={{ fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.1em" }}
                     >
             ÉTAPE {step.step}
@@ -81,13 +79,13 @@ function StepCard({
                 </div>
 
                 <h3
-                    className="text-white mb-3"
+                    className="font-anybody text-white mb-3"
                     style={{ fontSize: "1.3rem", fontWeight: 700 }}
                 >
                     {step.title}
                 </h3>
                 <p
-                    className="text-white/50 mb-5"
+                    className="font-anybody font-light text-white/50 mb-5"
                     style={{ fontSize: "0.95rem", lineHeight: 1.7 }}
                 >
                     {step.description}
@@ -100,21 +98,20 @@ function StepCard({
                     <div
                         className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${step.color}`}
                     />
-                    <span className="text-white/60" style={{ fontSize: "0.8rem" }}>
+                    <span className="font-anybody font-light text-white/60" style={{ fontSize: "0.8rem" }}>
             {step.tag}
           </span>
                 </div>
             </div>
 
-            {/* Visual indicator */}
             <div className="flex-shrink-0 flex flex-col items-center gap-3">
                 <div
-                    className={`w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br ${step.color} shadow-2xl ${step.glow}`}
+                    className={`font-anybody w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br ${step.color} shadow-2xl ${step.glow}`}
                     style={{ fontSize: "2rem", fontWeight: 800, color: "rgba(255,255,255,0.9)" }}
                 >
                     {step.step}
                 </div>
-                {index < steps.length - 1 && (
+                {index < steps.length - 0 && (
                     <div className="w-0.5 h-16 bg-gradient-to-b from-white/20 to-transparent hidden md:block" />
                 )}
             </div>
@@ -128,7 +125,6 @@ export function HowItWorksSection() {
 
     return (
         <section className="py-24 px-6 bg-[080808] relative overflow-hidden">
-            {/* Subtle background gradient */}
             <div
                 className="absolute inset-0 opacity-30"
                 style={{
@@ -139,13 +135,12 @@ export function HowItWorksSection() {
 
             <div className="max-w-6xl mx-auto relative">
                 <div className="flex flex-col md:flex-row gap-16 md:gap-20">
-                    {/* Header — aligné à gauche, sticky */}
                     <div ref={titleRef} className="md:w-2/5 md:sticky md:top-24 md:self-start">
                         <motion.h2
                             initial={{ opacity: 0, x: -30 }}
                             animate={titleInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.1 }}
-                            className="text-white mb-4"
+                            className="font-anybody text-white mb-4"
                             style={{
                                 fontSize: "clamp(1.8rem, 4vw, 3rem)",
                                 fontWeight: 800,
@@ -153,23 +148,14 @@ export function HowItWorksSection() {
                                 letterSpacing: "-0.02em",
                             }}
                         >
-                            3 étapes pour transformer{" "}
-                            <span
-                                style={{
-                                    background: "linear-gradient(90deg, #9340ff, #f3207c, #ff8200)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                }}
-                            >
-                                votre façon de réviser
-                            </span>
+                            3 étapes pour transformer votre façon de réviser
                         </motion.h2>
 
                         <motion.p
                             initial={{ opacity: 0, x: -30 }}
                             animate={titleInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="text-white/50"
+                            className="font-anybody font-light text-white/50"
                             style={{ fontSize: "1rem", lineHeight: 1.7 }}
                         >
                             Aucune configuration complexe. Commencez à réviser efficacement en
@@ -177,7 +163,6 @@ export function HowItWorksSection() {
                         </motion.p>
                     </div>
 
-                    {/* Steps — à droite */}
                     <div className="md:w-3/5 flex flex-col gap-8">
                         {steps.map((step, i) => (
                             <StepCard key={step.step} step={step} index={i} />
