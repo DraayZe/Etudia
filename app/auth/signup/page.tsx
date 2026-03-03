@@ -84,14 +84,6 @@ export default function SignupPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(255,255,255,0.03)_0%,_transparent_50%)]" />
       </div>
 
-      {/* Back to home */}
-      <Link
-        href="/"
-        className="absolute left-8 top-8 font-anybody text-sm text-white/50 transition-colors hover:text-white"
-      >
-        &larr; Retour
-      </Link>
-
       <div className="relative z-10 w-full max-w-md px-6">
         {/* Header */}
         <div className="mb-10 text-center">
@@ -106,11 +98,10 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* Google button */}
         <button
           type="button"
           onClick={handleGoogleSignup}
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-anybody text-sm font-medium text-white transition-all duration-300 hover:border-white/20 hover:bg-white/10"
+          className="hover:cursor-pointer flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-anybody text-sm font-medium text-white transition-all duration-300 hover:border-white/20 hover:bg-white/10"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path
@@ -182,7 +173,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[#F8F4F4] px-4 py-3 font-anybody text-sm font-medium text-black transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
+            className="hover:cursor-pointer w-full rounded-xl bg-[#F8F4F4] px-4 py-3 font-anybody text-sm font-medium text-black transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
           >
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
