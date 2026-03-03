@@ -156,7 +156,7 @@ export function HowItWorksSection() {
                             3 étapes pour transformer{" "}
                             <span
                                 style={{
-                                    background: "linear-gradient(90deg, #ec4899, #f97316)",
+                                    background: "linear-gradient(90deg, #9340ff, #f3207c, #ff8200)",
                                     WebkitBackgroundClip: "text",
                                     WebkitTextFillColor: "transparent",
                                 }}

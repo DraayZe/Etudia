@@ -135,7 +135,7 @@ export function FeaturesSection() {
                         <span
                             style={{
                                 background:
-                                    "linear-gradient(90deg, #a855f7, #ec4899, #f97316)",
+                                    "linear-gradient(90deg, #a684ff, #fb64b6, #ff8904, #01b9d5, #00d492, #7c86ff)",
                                 WebkitBackgroundClip: "text",
                                 WebkitTextFillColor: "transparent",
                             }}
