@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# Fichier MD
+CLAUDE.md
+
 # next.js
 /.next/
 /out/
