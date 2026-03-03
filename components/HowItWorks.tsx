@@ -138,50 +138,51 @@ export function HowItWorksSection() {
             />
 
             <div className="max-w-6xl mx-auto relative">
-                {/* Header */}
-                <div ref={titleRef} className="text-center mb-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={titleInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-white mb-4"
-                        style={{
-                            fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                            fontWeight: 800,
-                            lineHeight: 1.2,
-                            letterSpacing: "-0.02em",
-                        }}
-                    >
-                        3 étapes pour transformer
-                        <br />
-                        <span
+                <div className="flex flex-col md:flex-row gap-16 md:gap-20">
+                    {/* Header — aligné à gauche, sticky */}
+                    <div ref={titleRef} className="md:w-2/5 md:sticky md:top-24 md:self-start">
+                        <motion.h2
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={titleInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                            className="text-white mb-4"
                             style={{
-                                background: "linear-gradient(90deg, #ec4899, #f97316)",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
+                                fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                                fontWeight: 800,
+                                lineHeight: 1.2,
+                                letterSpacing: "-0.02em",
                             }}
                         >
-              votre façon de réviser
-            </span>
-                    </motion.h2>
+                            3 étapes pour transformer{" "}
+                            <span
+                                style={{
+                                    background: "linear-gradient(90deg, #ec4899, #f97316)",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                }}
+                            >
+                                votre façon de réviser
+                            </span>
+                        </motion.h2>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={titleInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-white/50 max-w-lg mx-auto"
-                        style={{ fontSize: "1rem", lineHeight: 1.7 }}
-                    >
-                        Aucune configuration complexe. Commencez à réviser efficacement en
-                        moins d'une minute.
-                    </motion.p>
-                </div>
+                        <motion.p
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={titleInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="text-white/50"
+                            style={{ fontSize: "1rem", lineHeight: 1.7 }}
+                        >
+                            Aucune configuration complexe. Commencez à réviser efficacement en
+                            moins d&apos;une minute.
+                        </motion.p>
+                    </div>
 
-                {/* Steps */}
-                <div className="flex flex-col gap-8">
-                    {steps.map((step, i) => (
-                        <StepCard key={step.step} step={step} index={i} />
-                    ))}
+                    {/* Steps — à droite */}
+                    <div className="md:w-3/5 flex flex-col gap-8">
+                        {steps.map((step, i) => (
+                            <StepCard key={step.step} step={step} index={i} />
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

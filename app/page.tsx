@@ -1,6 +1,8 @@
 import { HeroSection } from "@/components/HeroSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import {HowItWorksSection} from "@/components/HowItWorks";
+import GlobeSection from "@/components/GlobeSection";
+
 
 export default function Home() {
   return (
@@ -8,6 +10,7 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
         <HowItWorksSection/>
+        <GlobeSection />
     </div>
   );
 }
