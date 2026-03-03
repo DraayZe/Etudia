@@ -5,7 +5,7 @@ export function Navbar() {
     <nav className="flex items-center justify-between px-8 py-6 lg:px-16">
       <span className="font-medium text-3xl">ETUDIA</span>
 
-      <div className="hidden items-center gap-8 text-base text-white/70 md:flex ml-38">
+      <div className="hidden items-center gap-8 text-base text-white/70 md:flex ml-46">
         <Link href="#" className="font-light font-anybody hover:text-white">
           Demo
         </Link>

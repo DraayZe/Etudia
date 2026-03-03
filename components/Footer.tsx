@@ -1,71 +1,124 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useInView } from "motion/react";
 import Link from "next/link";
 
+const navLinks = [
+    { label: "Fonctionnalités", href: "#demo" },
+    { label: "Tarifs", href: "#pricing" },
+    { label: "S'inscrire", href: "/auth/signup" },
+    { label: "Se connecter", href: "/auth/login" },
+];
+
+const legalLinks = [
+    { label: "Mentions légales", href: "#" },
+    { label: "Confidentialité", href: "#" },
+];
+
 export function Footer() {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-40px" });
+
     return (
-        <footer className="bg-black border-t border-white/10 px-6 py-12">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between gap-10 mb-10">
-                    <div className="md:w-1/3">
+        <footer ref={ref} className="relative bg-black overflow-hidden">
+            {/* Gradient separator */}
+            <div
+                className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)" }}
+            />
+
+            <div className="relative z-10 max-w-6xl mx-auto px-6">
+                {/* Main row */}
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.55 }}
+                    className="flex flex-col md:flex-row md:items-start justify-between gap-8 pt-14 pb-10"
+                >
+                    {/* Brand */}
+                    <div>
                         <span className="font-anybody font-bold text-white text-xl tracking-tight">
                             Etudia
                         </span>
-                        <p className="font-anybody font-light text-white/40 text-sm mt-3 leading-relaxed">
+                        <p
+                            className="font-anybody font-light text-sm mt-2 leading-relaxed max-w-[260px]"
+                            style={{ color: "rgba(255,255,255,0.28)" }}
+                        >
                             Transforme tes cours en outils de révision intelligents grâce à l&apos;IA.
                         </p>
                     </div>
 
-                    <div className="flex gap-16">
-                        <div>
-                            <p className="font-anybody text-white/60 text-xs uppercase tracking-widest mb-4">
-                                Produit
-                            </p>
-                            <ul className="flex flex-col gap-3">
-                                <li>
-                                    <Link href="#demo" className="font-anybody font-light text-white/40 hover:text-white text-sm transition-colors duration-200">
-                                        Fonctionnalités
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="#pricing" className="font-anybody font-light text-white/40 hover:text-white text-sm transition-colors duration-200">
-                                        Tarifs
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
+                    {/* Nav */}
+                    <nav className="flex flex-wrap gap-x-8 gap-y-4">
+                        {navLinks.map((link, i) => (
+                            <motion.div
+                                key={link.label}
+                                initial={{ opacity: 0 }}
+                                animate={inView ? { opacity: 1 } : {}}
+                                transition={{ duration: 0.4, delay: 0.1 + i * 0.07 }}
+                            >
+                                <Link
+                                    href={link.href}
+                                    className="group relative font-anybody font-light text-white/35 hover:text-white/80 text-sm transition-colors duration-200"
+                                >
+                                    {link.label}
+                                    <span
+                                        className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-px transition-all duration-300"
+                                        style={{ background: "rgba(167,139,250,0.55)" }}
+                                    />
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </nav>
+                </motion.div>
 
-                        <div>
-                            <p className="font-anybody text-white/60 text-xs uppercase tracking-widest mb-4">
-                                Compte
-                            </p>
-                            <ul className="flex flex-col gap-3">
-                                <li>
-                                    <Link href="/auth/signup" className="font-anybody font-light text-white/40 hover:text-white text-sm transition-colors duration-200">
-                                        S&apos;inscrire
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/auth/login" className="font-anybody font-light text-white/40 hover:text-white text-sm transition-colors duration-200">
-                                        Se connecter
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {/* Divider */}
+                <div className="h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
 
-                <div className="border-t border-white/8 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-                    <p className="font-anybody font-light text-white/25 text-xs">
+                {/* Bottom row */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={inView ? { opacity: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.28 }}
+                    className="flex flex-col md:flex-row items-center justify-between gap-3 py-5"
+                >
+                    <p
+                        className="font-anybody font-light text-xs"
+                        style={{ color: "rgba(255,255,255,0.18)" }}
+                    >
                         © 2026 Etudia. Tous droits réservés.
                     </p>
                     <div className="flex gap-6">
-                        <Link href="#" className="font-anybody font-light text-white/25 hover:text-white/50 text-xs transition-colors duration-200">
-                            Mentions légales
-                        </Link>
-                        <Link href="#" className="font-anybody font-light text-white/25 hover:text-white/50 text-xs transition-colors duration-200">
-                            Confidentialité
-                        </Link>
+                        {legalLinks.map((link) => (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                className="font-anybody font-light text-white/20 hover:text-white/45 text-xs transition-colors duration-200"
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                     </div>
-                </div>
+                </motion.div>
+            </div>
+
+            {/* Decorative wordmark — clipped by overflow-hidden */}
+            <div className="overflow-hidden" style={{ height: "9rem" }} aria-hidden>
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={inView ? { opacity: 1 } : {}}
+                    transition={{ duration: 1.4, delay: 0.45 }}
+                    className="font-anybody font-bold text-center select-none pointer-events-none"
+                    style={{
+                        fontSize: "clamp(6rem, 22vw, 18rem)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.04em",
+                        color: "rgba(255,255,255,0.028)",
+                    }}
+                >
+                    Etudia
+                </motion.p>
             </div>
         </footer>
     );
