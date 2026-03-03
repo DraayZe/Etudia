@@ -1,190 +1,139 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "motion/react";
-import {
-    FileText,
-    Zap,
-    Brain,
-    RotateCcw,
-    BarChart3,
-    MessageSquare,
-} from "lucide-react";
+import { useRef } from "react";
+import { motion, useInView } from "motion/react";
+import { FileText, Zap, Brain, RotateCcw, BarChart3, MessageSquare } from "lucide-react";
 
 const features = [
     {
         icon: FileText,
         title: "Résumés intelligents",
-        description:
-            "Vos cours condensés en résumés clairs et structurés. Gardez l'essentiel, éliminez le superflu. L'IA identifie les points importants et les hiérarchise pour vous.",
-        iconColor: "text-violet-400",
-        activeColor: "border-violet-500/50",
-    },
-    {
-        icon: Zap,
-        title: "Quiz adaptatifs",
-        description:
-            "Des questions générées à partir de votre cours. L'IA adapte la difficulté selon vos réponses pour cibler vos lacunes et renforcer vos acquis.",
-        iconColor: "text-pink-400",
-        activeColor: "border-pink-500/50",
+        description: "Vos cours condensés en résumés clairs et structurés. L'IA identifie les points importants et les hiérarchise pour vous.",
+        accent: "#a78bfa",
     },
     {
         icon: Brain,
         title: "Flashcards IA",
-        description:
-            "Des cartes mémo créées automatiquement avec un algorithme de répétition espacée. Révisez au bon moment pour une mémorisation durable.",
-        iconColor: "text-orange-400",
-        activeColor: "border-orange-500/50",
+        description: "Cartes mémo créées automatiquement avec un algorithme de répétition espacée. Révisez au bon moment pour une mémorisation durable.",
+        accent: "#fb923c",
+    },
+    {
+        icon: Zap,
+        title: "Quiz adaptatifs",
+        description: "Des questions générées à partir de votre cours. L'IA adapte la difficulté selon vos réponses pour cibler vos lacunes.",
+        accent: "#f472b6",
     },
     {
         icon: RotateCcw,
         title: "Répétition espacée",
-        description:
-            "Algorithme basé sur la science cognitive. Etudia vous rappelle de réviser au moment optimal pour ancrer les connaissances dans votre mémoire à long terme.",
-        iconColor: "text-cyan-400",
-        activeColor: "border-cyan-500/50",
+        description: "Algorithme basé sur la science cognitive. Révisez au bon moment pour ancrer les connaissances dans votre mémoire à long terme.",
+        accent: "#22d3ee",
     },
     {
         icon: BarChart3,
         title: "Suivi de progression",
-        description:
-            "Visualisez vos progrès en temps réel. Identifiez vos points faibles, suivez votre évolution et concentrez vos efforts là où ça compte.",
-        iconColor: "text-emerald-400",
-        activeColor: "border-emerald-500/50",
+        description: "Visualisez vos progrès en temps réel. Identifiez vos points faibles et concentrez vos efforts là où ça compte.",
+        accent: "#34d399",
     },
     {
         icon: MessageSquare,
         title: "Tuteur IA personnel",
-        description:
-            "Posez vos questions directement sur votre cours. Obtenez des explications claires, des exemples concrets et un niveau ajustable du vulgarisé à l'expert.",
-        iconColor: "text-indigo-400",
-        activeColor: "border-indigo-500/50",
+        description: "Posez vos questions directement sur votre cours. Explications claires, exemples concrets, niveau ajustable.",
+        accent: "#818cf8",
     },
 ];
 
-function FeatureCube({
-    feature,
-    index,
-    isActive,
-    onClick,
-}: {
-    feature: (typeof features)[0];
-    index: number;
-    isActive: boolean;
-    onClick: () => void;
-}) {
+function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index: number }) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-60px" });
+    const inView = useInView(ref, { once: true, margin: "-40px" });
     const Icon = feature.icon;
 
     return (
-        <motion.button
+        <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.08 }}
-            onClick={onClick}
-            className={`group relative aspect-square rounded-2xl border bg-white/[0.03] backdrop-blur-sm flex items-center justify-center cursor-pointer transition-all duration-300 ${
-                isActive
-                    ? `${feature.activeColor} bg-white/[0.06]`
-                    : "border-white/10 hover:border-white/20 hover:bg-white/[0.05]"
-            }`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: index * 0.07 }}
+            className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 overflow-hidden hover:border-white/[0.13] transition-colors duration-300"
         >
-            {/* Icon - visible by default, hidden on hover */}
             <div
-                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0 ${feature.iconColor}`}
-            >
-                <Icon size={32} strokeWidth={1.5} />
-            </div>
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse 80% 60% at 50% 120%, ${feature.accent}1c, transparent)` }}
+            />
 
-            {/* Title - hidden by default, visible on hover */}
-            <div className="absolute inset-0 flex items-center justify-center px-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="font-anybody text-sm font-medium text-white text-center leading-tight">
+            <div
+                className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: `linear-gradient(90deg, transparent, ${feature.accent}55, transparent)` }}
+            />
+
+            <div className="relative z-10">
+                <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center mb-5"
+                    style={{ background: `${feature.accent}18`, color: feature.accent }}
+                >
+                    <Icon size={18} strokeWidth={1.5} />
+                </div>
+                <h3
+                    className="font-anybody font-bold text-white mb-2"
+                    style={{ fontSize: "1rem", letterSpacing: "-0.01em" }}
+                >
                     {feature.title}
-                </span>
+                </h3>
+                <p
+                    className="font-anybody font-light text-white/40 leading-relaxed"
+                    style={{ fontSize: "0.875rem" }}
+                >
+                    {feature.description}
+                </p>
             </div>
-        </motion.button>
+        </motion.div>
     );
 }
 
 export function FeaturesSection() {
-    const [activeIndex, setActiveIndex] = useState(0);
     const titleRef = useRef(null);
     const titleInView = useInView(titleRef, { once: true, margin: "-60px" });
-    const activeFeature = features[activeIndex];
 
     return (
         <section className="py-24 px-6 bg-[#000000]" id="demo">
             <div className="max-w-6xl mx-auto">
-                {/* Header */}
-                <div ref={titleRef} className="text-center mb-16">
+                <div ref={titleRef} className="text-center mb-14">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={titleInView ? { opacity: 1 } : {}}
+                        transition={{ duration: 0.5 }}
+                        className="font-anybody font-light text-white/25 text-xs uppercase tracking-[0.15em] mb-5"
+                    >
+                        Fonctionnalités
+                    </motion.p>
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 14 }}
                         animate={titleInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="font-anybody text-white mb-4"
-                        style={{
-                            fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                            fontWeight: 800,
-                            lineHeight: 1.2,
-                            letterSpacing: "-0.02em",
-                        }}
+                        transition={{ duration: 0.55, delay: 0.06 }}
+                        className="font-anybody font-bold text-white"
+                        style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", lineHeight: 1.15, letterSpacing: "-0.02em" }}
                     >
                         Tout ce dont vous avez besoin
                         <br />
                         pour maîtriser vos cours
                     </motion.h2>
-
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 14 }}
                         animate={titleInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="font-anybody font-light text-white/50 max-w-xl mx-auto"
-                        style={{ fontSize: "1rem", lineHeight: 1.7 }}
+                        transition={{ duration: 0.55, delay: 0.12 }}
+                        className="font-anybody font-light text-white/40 max-w-md mx-auto mt-4"
+                        style={{ fontSize: "0.95rem", lineHeight: 1.7 }}
                     >
                         Importez n&apos;importe quel document et laissez Etudia générer
                         automatiquement tous vos outils de révision.
                     </motion.p>
                 </div>
 
-                {/* 6 Cubes */}
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-3xl mx-auto mb-12">
-                    {features.map((feature, i) => (
-                        <FeatureCube
-                            key={feature.title}
-                            feature={feature}
-                            index={i}
-                            isActive={activeIndex === i}
-                            onClick={() => setActiveIndex(i)}
-                        />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {features.map((f, i) => (
+                        <FeatureCard key={f.title} feature={f} index={i} />
                     ))}
                 </div>
-
-                {/* Detail panel */}
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeIndex}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className={`max-w-3xl mx-auto rounded-2xl border bg-white/[0.03] p-8 sm:p-10 ${activeFeature.activeColor}`}
-                    >
-                        <div className="flex items-center gap-4 mb-4">
-                            <div
-                                className={`w-12 h-12 rounded-xl flex items-center justify-center bg-white/5 ${activeFeature.iconColor}`}
-                            >
-                                <activeFeature.icon size={24} strokeWidth={1.5} />
-                            </div>
-                            <h3 className="font-anybody text-xl font-bold text-white">
-                                {activeFeature.title}
-                            </h3>
-                        </div>
-                        <p className="font-anybody font-light text-white/60 leading-relaxed text-base">
-                            {activeFeature.description}
-                        </p>
-                    </motion.div>
-                </AnimatePresence>
             </div>
         </section>
     );

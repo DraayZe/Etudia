@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
+import { Check, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 const plans = [
@@ -45,166 +45,117 @@ const plans = [
     },
 ];
 
-function FeatureIcon({ highlight }: { highlight: boolean }) {
-    return (
-        <div className="flex items-center gap-1.5 flex-shrink-0 mt-0.5">
-            <div
-                className="h-px w-3"
-                style={{
-                    background: highlight ? "rgba(167,139,250,0.5)" : "rgba(255,255,255,0.15)",
-                }}
-            />
-            <span
-                style={{
-                    fontSize: "0.6rem",
-                    color: highlight ? "rgb(167,139,250)" : "rgba(255,255,255,0.3)",
-                }}
-            >
-                ✦
-            </span>
-            <div
-                className="h-px w-3"
-                style={{
-                    background: highlight ? "rgba(167,139,250,0.5)" : "rgba(255,255,255,0.15)",
-                }}
-            />
-        </div>
-    );
-}
-
-function PlanBadge({ name, highlight }: { name: string; highlight: boolean }) {
-    return (
-        <div className="flex items-center gap-2.5">
-            <div
-                className="h-px w-5"
-                style={{
-                    background: highlight ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.15)",
-                }}
-            />
-            <span
-                className={`font-anybody text-sm font-semibold px-3.5 py-1 rounded-full ${
-                    highlight
-                        ? "bg-white text-black"
-                        : "bg-white/10 text-white/70 border border-white/10"
-                }`}
-            >
-                {name}
-            </span>
-            <div
-                className="h-px w-5"
-                style={{
-                    background: highlight ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.15)",
-                }}
-            />
-        </div>
-    );
-}
-
-function PlanCard({
-    plan,
-    index,
-}: {
-    plan: (typeof plans)[0];
-    index: number;
-}) {
+function PlanCard({ plan, index }: { plan: (typeof plans)[0]; index: number }) {
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: "-60px" });
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.65, delay: index * 0.15 }}
-            className={`relative rounded-3xl border overflow-hidden ${
-                plan.highlight
-                    ? "border-violet-500/40"
-                    : "border-white/8"
-            }`}
+            transition={{ duration: 0.6, delay: index * 0.13 }}
+            className="relative rounded-2xl overflow-hidden flex flex-col"
             style={{
+                border: plan.highlight
+                    ? "1px solid rgba(167,139,250,0.3)"
+                    : "1px solid rgba(255,255,255,0.07)",
                 background: plan.highlight
-                    ? "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(236,72,153,0.08) 100%)"
-                    : "rgba(255,255,255,0.03)",
+                    ? "linear-gradient(160deg, rgba(139,92,246,0.09) 0%, rgba(0,0,0,0) 60%)"
+                    : "rgba(255,255,255,0.02)",
+                boxShadow: plan.highlight ? "0 0 80px rgba(139,92,246,0.08)" : "none",
             }}
         >
-            <div className="flex flex-col md:flex-row">
-                <div className="flex flex-col justify-between p-8 md:p-10 md:w-[42%] md:border-r border-b md:border-b-0 border-white/8">
-                    <div>
-                        <PlanBadge name={plan.name} highlight={plan.highlight} />
+            {/* Top accent line */}
+            <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{
+                    background: plan.highlight
+                        ? "linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)"
+                        : "transparent",
+                }}
+            />
 
-                        <div className="flex items-end gap-2 mt-7 mb-5">
-                            <span
-                                style={{
-                                    fontSize: "clamp(3rem, 6vw, 4rem)",
-                                    fontWeight: 800,
-                                    lineHeight: 1,
-                                    color: plan.highlight ? "rgb(167,139,250)" : "white",
-                                    letterSpacing: "-0.03em",
-                                }}
-                            >
-                                {plan.price}
-                            </span>
-                            {plan.period && (
-                                <span
-                                    className="mb-1"
-                                    style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem" }}
-                                >
-                                    {plan.period}
-                                </span>
-                            )}
-                        </div>
-
-                        <p className="font-anybody font-light leading-relaxed" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.55)" }}>
-                            <span className="font-anybody text-white font-semibold">{plan.descriptionBold}</span>
-                            {plan.descriptionRest}
-                        </p>
-                    </div>
-
-                    <Link
-                        href={plan.ctaHref}
-                        className={`mt-8 flex items-center gap-3 w-fit rounded-full transition-all duration-300 pr-5 ${
+            <div className="relative z-10 p-8 flex flex-col h-full">
+                {/* Badge */}
+                <div className="mb-7">
+                    <span
+                        className={`font-anybody text-xs font-semibold uppercase tracking-[0.1em] px-3 py-1 rounded-full ${
                             plan.highlight
-                                ? "hover:scale-[1.03] active:scale-[0.97]"
-                                : "hover:scale-[1.03] active:scale-[0.97]"
+                                ? "bg-violet-500/15 text-violet-300 border border-violet-500/20"
+                                : "bg-white/[0.06] text-white/35 border border-white/[0.08]"
                         }`}
+                    >
+                        {plan.name}
+                    </span>
+                </div>
+
+                {/* Price */}
+                <div className="flex items-end gap-1.5 mb-4">
+                    <span
+                        className="font-anybody font-bold"
                         style={{
-                            background: plan.highlight
-                                ? "rgb(139,92,246)"
-                                : "rgba(255,255,255,0.08)",
-                            border: plan.highlight ? "none" : "1px solid rgba(255,255,255,0.12)",
+                            fontSize: "clamp(3rem, 5vw, 3.8rem)",
+                            lineHeight: 1,
+                            letterSpacing: "-0.04em",
+                            color: plan.highlight ? "rgb(167,139,250)" : "white",
                         }}
                     >
-                        <div
-                            className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-                            style={{
-                                background: plan.highlight ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.1)",
-                            }}
+                        {plan.price}
+                    </span>
+                    {plan.period && (
+                        <span
+                            className="font-anybody font-light mb-1.5"
+                            style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.3)" }}
                         >
-                            <ArrowUpRight size={18} className="text-white" />
-                        </div>
-                        <span className="font-anybody text-white text-sm font-semibold">{plan.cta}</span>
-                    </Link>
+                            {plan.period}
+                        </span>
+                    )}
                 </div>
 
-                <div className="flex flex-col p-8 md:p-10 md:flex-1">
-                    <p
-                        className="font-anybody mb-6 font-semibold"
-                        style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.05em", textTransform: "uppercase" }}
-                    >
-                        Ce qui est inclus
-                    </p>
+                {/* Description */}
+                <p
+                    className="font-anybody font-light mb-7"
+                    style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.65 }}
+                >
+                    <span className="font-anybody text-white/75 font-medium">{plan.descriptionBold}</span>
+                    {plan.descriptionRest}
+                </p>
 
-                    <ul className="flex flex-col gap-4">
-                        {plan.features.map((feature) => (
-                            <li key={feature} className="flex items-center gap-3">
-                                <FeatureIcon highlight={plan.highlight} />
-                                <span className="font-anybody font-light" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.75)" }}>
-                                    {feature}
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                {/* Divider */}
+                <div className="h-px bg-white/[0.06] mb-7" />
+
+                {/* Features */}
+                <ul className="flex flex-col gap-3.5 flex-1 mb-8">
+                    {plan.features.map((f) => (
+                        <li key={f} className="flex items-start gap-3">
+                            <Check
+                                size={14}
+                                className="mt-0.5 flex-shrink-0"
+                                style={{ color: plan.highlight ? "rgb(167,139,250)" : "rgba(255,255,255,0.25)" }}
+                            />
+                            <span
+                                className="font-anybody font-light"
+                                style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.55)" }}
+                            >
+                                {f}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+
+                {/* CTA */}
+                <Link
+                    href={plan.ctaHref}
+                    className="flex items-center justify-center gap-2 w-full rounded-xl py-3 px-5 font-anybody font-medium text-sm text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                        background: plan.highlight ? "rgb(139,92,246)" : "rgba(255,255,255,0.07)",
+                        border: plan.highlight ? "none" : "1px solid rgba(255,255,255,0.1)",
+                    }}
+                >
+                    {plan.cta}
+                    <ArrowUpRight size={15} />
+                </Link>
             </div>
         </motion.div>
     );
@@ -218,64 +169,57 @@ export function PricingSection() {
         <section className="py-24 px-6 bg-[#000000] relative overflow-hidden" id="pricing">
             <div
                 className="absolute inset-0 pointer-events-none"
-                style={{
-                    background:
-                        "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139,92,246,0.12), transparent)",
-                }}
+                style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139,92,246,0.08), transparent)" }}
             />
 
-            <div className="max-w-6xl mx-auto relative">
-                <div className="flex flex-col md:flex-row gap-16 md:gap-20">
-                    {/* Left: Cards */}
-                    <div className="md:w-3/5 flex flex-col gap-5">
-                        {plans.map((plan, i) => (
-                            <PlanCard key={plan.name} plan={plan} index={i} />
-                        ))}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={titleInView ? { opacity: 1 } : {}}
-                            transition={{ duration: 0.6, delay: 0.7 }}
-                            className="font-anybody font-light text-white/25 text-xs"
-                        >
-                            Tous les prix sont TTC · Annulable à tout moment
-                        </motion.p>
-                    </div>
-
-                    {/* Right: Title — sticky */}
-                    <div ref={titleRef} className="md:w-2/5 md:sticky md:top-24 md:self-start">
-                        <motion.h2
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={titleInView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ duration: 0.6, delay: 0.1 }}
-                            className="font-anybody text-white mb-4"
-                            style={{
-                                fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                                fontWeight: 800,
-                                lineHeight: 1.2,
-                                letterSpacing: "-0.02em",
-                            }}
-                        >
-                            Prêt à transformer
-                            <br />
-                            <em style={{ fontStyle: "italic" }}>
-                                tes révisions
-                            </em>
-                            <span style={{ color: "rgb(255, 255, 255)" }}> ?</span>
-                        </motion.h2>
-
-                        <motion.p
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={titleInView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="font-anybody font-light text-white/40"
-                            style={{ fontSize: "0.95rem", lineHeight: 1.7 }}
-                        >
-                            Choisis le plan qui te correspond.
-                            <br />
-                            Commence gratuitement, sans carte bancaire.
-                        </motion.p>
-                    </div>
+            <div className="max-w-3xl mx-auto relative">
+                <div ref={titleRef} className="text-center mb-14">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={titleInView ? { opacity: 1 } : {}}
+                        transition={{ duration: 0.5 }}
+                        className="font-anybody font-light text-white/25 text-xs uppercase tracking-[0.15em] mb-5"
+                    >
+                        Tarifs
+                    </motion.p>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={titleInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.55, delay: 0.06 }}
+                        className="font-anybody font-bold text-white"
+                        style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", lineHeight: 1.15, letterSpacing: "-0.02em" }}
+                    >
+                        Prêt à transformer
+                        <br />
+                        <em style={{ fontStyle: "italic" }}>tes révisions</em> ?
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={titleInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.55, delay: 0.12 }}
+                        className="font-anybody font-light text-white/40 max-w-sm mx-auto mt-4"
+                        style={{ fontSize: "0.95rem", lineHeight: 1.7 }}
+                    >
+                        Choisis le plan qui te correspond.
+                        <br />
+                        Commence gratuitement, sans carte bancaire.
+                    </motion.p>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {plans.map((plan, i) => (
+                        <PlanCard key={plan.name} plan={plan} index={i} />
+                    ))}
+                </div>
+
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={titleInView ? { opacity: 1 } : {}}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    className="font-anybody font-light text-white/20 text-xs text-center mt-6"
+                >
+                    Tous les prix sont TTC · Annulable à tout moment
+                </motion.p>
             </div>
         </section>
     );
