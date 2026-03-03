@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import UploadSection from "./upload-section";
+import ProfileMenu from "./profile-menu";
+import { FileText, Calendar } from "lucide-react";
+import Link from "next/link";
 
 interface KeyConcept {
   term: string;
@@ -32,132 +35,164 @@ export default async function DashboardPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/auth/login");
-  }
+  if (!user) redirect("/auth/login");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, avatar_url, plan")
+    .eq("user_id", user.id)
+    .single();
 
   const { data: courses } = await supabase
     .from("courses")
     .select("id, title, created_at, analyses(id, summary, key_concepts)")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(10);
 
   const typedCourses = (courses ?? []) as Course[];
-
   const selectedCourse = selectedCourseId
     ? typedCourses.find((c) => c.id === selectedCourseId)
     : null;
-
   const analysis = selectedCourse?.analyses?.[0] ?? null;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Mes cours</h1>
-        <LogoutButton />
-      </div>
+    <div className="min-h-screen bg-[#080808] text-white">
+      <header className="border-b border-white/[0.06] px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="font-anybody font-bold text-white text-xl tracking-tight">
+            ETUDIA
+          </div>
+          <ProfileMenu email={user.email!} profile={profile} />
+        </div>
+      </header>
 
-      <UploadSection userId={user.id} />
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+          <div className="flex flex-col gap-8">
+            <UploadSection userId={user.id} />
 
-      <div className="mt-8 space-y-3">
-        {typedCourses.length > 0 ? (
-          typedCourses.map((course) => {
-            const hasAnalysis = course.analyses?.length > 0;
-            const isSelected = course.id === selectedCourseId;
-
-            return (
-              <a
-                key={course.id}
-                href={
-                  isSelected
-                    ? "/dashboard"
-                    : `/dashboard?course=${course.id}`
-                }
-                className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors hover:bg-foreground/5 ${
-                  isSelected
-                    ? "border-foreground/30 bg-foreground/5"
-                    : "border-foreground/10"
-                }`}
-              >
-                <div>
-                  <p className="font-medium">{course.title}</p>
-                  <p className="text-xs text-foreground/50">
-                    {new Date(course.created_at).toLocaleDateString("fr-FR", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
+            {selectedCourse && analysis && (
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="h-px flex-1 bg-white/[0.06]" />
+                  <span className="font-anybody font-light text-white/30 text-xs uppercase tracking-widest">
+                    Résultats
+                  </span>
+                  <div className="h-px flex-1 bg-white/[0.06]" />
                 </div>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                    hasAnalysis
-                      ? "bg-green-500/10 text-green-600"
-                      : "bg-foreground/5 text-foreground/40"
-                  }`}
-                >
-                  {hasAnalysis ? "Analysé" : "En attente"}
-                </span>
-              </a>
-            );
-          })
-        ) : (
-          <p className="text-sm text-foreground/50">
-            Aucun cours pour l&apos;instant. Upload ton premier PDF !
-          </p>
-        )}
-      </div>
 
-      {selectedCourse && analysis && (
-        <div className="mt-10 space-y-8">
-          <section>
-            <h2 className="text-xl font-bold">
-              Résumé — {selectedCourse.title}
-            </h2>
-            <div className="mt-3 whitespace-pre-line rounded-lg border border-foreground/10 p-4 text-sm leading-relaxed">
-              {analysis.summary}
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold">Notions clés</h2>
-            <div className="mt-3 space-y-3">
-              {analysis.key_concepts.map(
-                (concept: KeyConcept, i: number) => (
-                  <div
-                    key={i}
-                    className="rounded-lg border border-foreground/10 p-4"
-                  >
-                    <p className="font-semibold">{concept.term}</p>
-                    <p className="mt-1 text-sm text-foreground/70">
-                      {concept.definition}
+                <section>
+                  <h2 className="font-anybody font-bold text-white text-lg mb-3">
+                    Résumé — <span className="text-white/50 font-light">{selectedCourse.title}</span>
+                  </h2>
+                  <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
+                    <p className="font-anybody font-light text-white/60 text-sm leading-relaxed whitespace-pre-line">
+                      {analysis.summary}
                     </p>
                   </div>
-                )
+                </section>
+
+                <section>
+                  <h2 className="font-anybody font-bold text-white text-lg mb-3">
+                    Notions clés
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {analysis.key_concepts.map((concept, i) => (
+                      <div
+                        key={i}
+                        className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"
+                      >
+                        <p className="font-anybody font-bold text-white text-sm mb-1">
+                          {concept.term}
+                        </p>
+                        <p className="font-anybody font-light text-white/45 text-xs leading-relaxed">
+                          {concept.definition}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {selectedCourse && !analysis && (
+              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-8 text-center">
+                <p className="font-anybody font-light text-white/30 text-sm">
+                  Ce cours n&apos;a pas encore été analysé.
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="lg:sticky lg:top-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-anybody font-bold text-white text-sm">
+                Tes derniers cours
+              </h2>
+              {typedCourses.length > 0 && (
+                <span className="font-anybody font-light text-white/25 text-xs">
+                  {typedCourses.length}
+                </span>
               )}
             </div>
-          </section>
-        </div>
-      )}
 
-      {selectedCourse && !analysis && (
-        <div className="mt-10 rounded-lg border border-foreground/10 p-6 text-center text-sm text-foreground/50">
-          Ce cours n&apos;a pas encore été analysé.
+            {typedCourses.length === 0 ? (
+              <div className="rounded-2xl border border-white/[0.07] border-dashed p-8 text-center">
+                <p className="font-anybody font-light text-white/25 text-sm">
+                  Aucun cours pour l&apos;instant
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {typedCourses.map((course) => {
+                  const hasAnalysis = course.analyses?.length > 0;
+                  const isSelected = course.id === selectedCourseId;
+
+                  return (
+                    <a
+                      key={course.id}
+                      href={isSelected ? "/dashboard" : `/dashboard?course=${course.id}`}
+                      className={`cursor-pointer group flex items-start gap-3 rounded-xl border p-4 transition-all duration-200 ${
+                        isSelected
+                          ? "border-white/15 bg-white/[0.04]"
+                          : "border-white/[0.06] bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]"
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <FileText size={14} className="text-white/40" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-anybody font-medium text-white/80 text-sm truncate">
+                          {course.title}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Calendar size={10} className="text-white/20 flex-shrink-0" />
+                          <span className="font-anybody font-light text-white/25 text-xs">
+                            {new Date(course.created_at).toLocaleDateString("fr-FR", {
+                              day: "numeric",
+                              month: "short",
+                            })}
+                          </span>
+                          <span
+                            className={`ml-auto text-xs font-anybody px-2 py-0.5 rounded-full flex-shrink-0 ${
+                              hasAnalysis
+                                ? "bg-emerald-500/10 text-emerald-400"
+                                : "bg-white/[0.05] text-white/25"
+                            }`}
+                          >
+                            {hasAnalysis ? "Analysé" : "En attente"}
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </main>
     </div>
-  );
-}
-
-function LogoutButton() {
-  return (
-    <form action="/auth/logout" method="post">
-      <button
-        type="submit"
-        className="rounded-lg border border-foreground/20 px-3 py-1.5 text-sm transition-colors hover:bg-foreground/5"
-      >
-        Déconnexion
-      </button>
-    </form>
   );
 }
