@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Crown, LogOut, Settings, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 interface Profile {
   full_name: string | null;
@@ -73,6 +74,12 @@ export default function ProfileMenu({ email, profile }: ProfileMenuProps) {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -144,15 +151,13 @@ export default function ProfileMenu({ email, profile }: ProfileMenuProps) {
                   <Settings size={14} className="text-white/30" />
                   Paramètres du compte
                 </button>
-                <form action="/auth/logout" method="post">
-                  <button
-                    type="submit"
-                    className="cursor-pointer flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-left font-anybody font-light text-white/60 text-sm hover:text-red-400 hover:bg-red-500/[0.06] transition-all duration-150"
-                  >
-                    <LogOut size={14} className="text-white/30" />
-                    Déconnexion
-                  </button>
-                </form>
+                <button
+                  onClick={handleLogout}
+                  className="cursor-pointer flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-left font-anybody font-light text-white/60 text-sm hover:text-red-400 hover:bg-red-500/[0.06] transition-all duration-150"
+                >
+                  <LogOut size={14} className="text-white/30" />
+                  Déconnexion
+                </button>
               </div>
             </motion.div>
           )}

@@ -165,7 +165,7 @@ export default function UploadSection({ userId }: { userId: string }) {
               Commence à réviser avec l'IA...
             </h1>
             <p className="font-anybody font-light text-white/35 text-sm mb-6">
-              Importe un cours, choisis une fonctionnalité et laisse l&apos;IA faire le reste.
+              Importe un cours, choisis une fonctionnalitée et laisse l&apos;IA faire le reste.
             </p>
 
             <label
