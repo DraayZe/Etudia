@@ -2,12 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import UploadSection from "./upload-section";
 import ProfileMenu from "./profile-menu";
-import { FileText, Calendar } from "lucide-react";
-import Link from "next/link";
+import CourseCard from "./course-card";
 
 interface KeyConcept {
   term: string;
   definition: string;
+  example?: string;
+  importance?: "principale" | "secondaire";
 }
 
 interface Analysis {
@@ -87,7 +88,7 @@ export default async function DashboardPage({
                     Résumé — <span className="text-white/50 font-light">{selectedCourse.title}</span>
                   </h2>
                   <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
-                    <p className="font-anybody font-light text-white/60 text-sm leading-relaxed whitespace-pre-line">
+                    <p className="font-anybody font-light text-white/75 text-sm leading-loose whitespace-pre-line">
                       {analysis.summary}
                     </p>
                   </div>
@@ -103,12 +104,32 @@ export default async function DashboardPage({
                         key={i}
                         className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"
                       >
-                        <p className="font-anybody font-bold text-white text-sm mb-1">
-                          {concept.term}
-                        </p>
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <p className="font-anybody font-bold text-white text-sm">
+                            {concept.term}
+                          </p>
+                          {concept.importance && (
+                            <span
+                              className={`flex-shrink-0 text-[0.65rem] font-anybody px-2 py-0.5 rounded-full ${
+                                concept.importance === "principale"
+                                  ? "bg-violet-500/15 text-violet-400"
+                                  : "bg-white/[0.05] text-white/30"
+                              }`}
+                            >
+                              {concept.importance === "principale" ? "Principale" : "Secondaire"}
+                            </span>
+                          )}
+                        </div>
                         <p className="font-anybody font-light text-white/45 text-xs leading-relaxed">
                           {concept.definition}
                         </p>
+                        {concept.example && (
+                          <div className="border-t border-white/[0.06] mt-2 pt-2">
+                            <p className="font-anybody font-light text-white/35 text-xs italic leading-relaxed">
+                              Ex : {concept.example}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -146,46 +167,14 @@ export default async function DashboardPage({
             ) : (
               <div className="flex flex-col gap-2">
                 {typedCourses.map((course) => {
-                  const hasAnalysis = course.analyses?.length > 0;
                   const isSelected = course.id === selectedCourseId;
 
                   return (
-                    <a
+                    <CourseCard
                       key={course.id}
-                      href={isSelected ? "/dashboard" : `/dashboard?course=${course.id}`}
-                      className={`cursor-pointer group flex items-start gap-3 rounded-xl border p-4 transition-all duration-200 ${
-                        isSelected
-                          ? "border-white/15 bg-white/[0.04]"
-                          : "border-white/[0.06] bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]"
-                      }`}
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <FileText size={14} className="text-white/40" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-anybody font-medium text-white/80 text-sm truncate">
-                          {course.title}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Calendar size={10} className="text-white/20 flex-shrink-0" />
-                          <span className="font-anybody font-light text-white/25 text-xs">
-                            {new Date(course.created_at).toLocaleDateString("fr-FR", {
-                              day: "numeric",
-                              month: "short",
-                            })}
-                          </span>
-                          <span
-                            className={`ml-auto text-xs font-anybody px-2 py-0.5 rounded-full flex-shrink-0 ${
-                              hasAnalysis
-                                ? "bg-emerald-500/10 text-emerald-400"
-                                : "bg-white/[0.05] text-white/25"
-                            }`}
-                          >
-                            {hasAnalysis ? "Analysé" : "En attente"}
-                          </span>
-                        </div>
-                      </div>
-                    </a>
+                      course={course}
+                      isSelected={isSelected}
+                    />
                   );
                 })}
               </div>
