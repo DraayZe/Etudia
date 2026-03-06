@@ -21,7 +21,7 @@ const features = [
   {
     id: "summary",
     icon: FileText,
-    title: "Résumé & Notions clés",
+    title: "Résumé et notions clés",
     description: "Un résumé structuré et les concepts essentiels du cours.",
     accent: "#a78bfa",
     available: true,

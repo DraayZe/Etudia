@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { model } from "@/lib/gemini";
+import { getAnalysisConfig, type Plan } from "@/lib/prompts";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -13,7 +13,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const { courseId, filePath } = await request.json();
+  // Fix 5: Guard request.json()
+  let courseId: unknown, filePath: unknown;
+  try {
+    ({ courseId, filePath } = await request.json());
+  } catch {
+    return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+  }
 
   if (!courseId || !filePath) {
     return NextResponse.json(
@@ -22,10 +28,10 @@ export async function POST(request: Request) {
     );
   }
 
-  // Verify the course belongs to the user
+  // Fix 2: Select file_path from DB to avoid IDOR / path traversal
   const { data: course } = await supabase
     .from("courses")
-    .select("id")
+    .select("id, file_path")
     .eq("id", courseId)
     .eq("user_id", user.id)
     .single();
@@ -34,10 +40,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Cours introuvable" }, { status: 404 });
   }
 
-  // Download PDF from Supabase Storage
+  // Fetch user plan
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("user_id", user.id)
+    .single();
+
+  // Fix 4: Cast plan to Plan type
+  const plan = (profile?.plan ?? "free") as Plan;
+  const { model, prompt } = getAnalysisConfig(plan);
+
+  // Fix 2: Use course.file_path from DB instead of client-supplied filePath
   const { data: fileData, error: downloadError } = await supabase.storage
     .from("pdfs")
-    .download(filePath);
+    .download(course.file_path);
 
   if (downloadError || !fileData) {
     console.error("Download error:", downloadError);
@@ -47,28 +64,12 @@ export async function POST(request: Request) {
     );
   }
 
-  // Convert to base64 for Gemini
   const arrayBuffer = await fileData.arrayBuffer();
   const base64 = Buffer.from(arrayBuffer).toString("base64");
 
-  // Send to Gemini
-  const prompt = `Tu es un assistant pédagogique expert. Analyse le document PDF suivant et génère :
-
-1. Un **résumé structuré** du cours (3 à 5 paragraphes, clair et pédagogique)
-2. Une liste de **notions clés** (entre 5 et 15) avec pour chacune :
-   - "term" : le nom du concept/notion
-   - "definition" : une définition concise et claire
-
-Réponds UNIQUEMENT avec un JSON valide au format suivant, sans markdown ni backticks :
-{
-  "summary": "Le résumé ici...",
-  "key_concepts": [
-    { "term": "Notion 1", "definition": "Définition 1" },
-    { "term": "Notion 2", "definition": "Définition 2" }
-  ]
-}`;
-
-  let parsed: { summary: string; key_concepts: { term: string; definition: string }[] };
+  // Fix 3: Proper KeyConcept type placed outside the try block
+  type KeyConcept = { term: string; definition: string; example?: string; importance?: string };
+  let parsed: { summary: string; key_concepts: KeyConcept[] };
   try {
     const result = await model.generateContent([
       {
@@ -87,6 +88,11 @@ Réponds UNIQUEMENT avec un JSON valide au format suivant, sans markdown ni back
       .replace(/```\s*/g, "")
       .trim();
     parsed = JSON.parse(cleanJson);
+
+    // Fix 3: Runtime validation of Gemini response shape
+    if (typeof parsed.summary !== "string" || !Array.isArray(parsed.key_concepts)) {
+      return NextResponse.json({ error: "Réponse IA invalide" }, { status: 500 });
+    }
   } catch (err: unknown) {
     console.error("Gemini/parse error:", err);
     const message =
@@ -96,7 +102,6 @@ Réponds UNIQUEMENT avec un JSON valide au format suivant, sans markdown ni back
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
-  // Save analysis in database
   const { data: analysis, error: insertError } = await supabase
     .from("analyses")
     .insert({
